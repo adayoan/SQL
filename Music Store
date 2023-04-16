@@ -1,0 +1,36 @@
+-- Create Database for a Music Store
+CREATE TABLE music_store (id INTEGER PRIMARY KEY, album_name TEXT, artist TEXT, genre TEXT, price REAL, in_stock INTEGER);
+
+-- Inserting inventory info
+INSERT INTO music_store VALUES (1, "Taylor Swift", "Taylor Swift", "Country", 13.99, 5);
+INSERT INTO music_store VALUES (2, "Fearless (Taylor's Version)", "Taylor Swift", "Country", 19.89, 2);
+INSERT INTO music_store VALUES (3, "Speak Now", "Taylor Swift", "Country", 15.99, 1);
+INSERT INTO music_store VALUES (4, "Red (Taylor's Version)", "Taylor Swift", "Pop", 21.99, 8);
+INSERT INTO music_store VALUES (5, "1989", "Taylor Swift", "Pop", 16.99, 4);
+INSERT INTO music_store VALUES (6, "Reputation", "Taylor Swift", "Pop", 15.99, 12);
+INSERT INTO music_store VALUES (7, "Lover", "Taylor Swift", "Pop", 15.99, 6);
+INSERT INTO music_store VALUES (8, "Folklore", "Taylor Swift", "Pop", 18.99, 5);
+INSERT INTO music_store VALUES (9, "Evermore", "Taylor Swift", "Pop", 18.99, 7);
+INSERT INTO music_store VALUES (10, "Midnights", "Taylor Swift", "Pop", 22.99, 0);
+INSERT INTO music_store VALUES (11, "Nothing Feels Good", "The Promise Ring", "Emo", 10.99, 2);
+INSERT INTO music_store VALUES (12, "The Places You Have Come to Fear the Most", "Dashboard Confessional", "Emo", 12.99, 4);
+INSERT INTO music_store VALUES (13, "The Swiss Army Romance", "Dashboard Confessional", "Emo", 12.99, 6);
+INSERT INTO music_store VALUES (14, "Brand New Eyes", "Paramore", "Pop Punk", 14.99, 7);
+INSERT INTO music_store VALUES (15, "Nothing Personal", "All Time Low", "Pop Punk", 13.99, 0);
+
+
+--Display whole table
+SELECT * FROM music_store;
+
+-- Show only Taylor Swift albums
+SELECT * FROM music_store WHERE artist=="Taylor Swift";
+
+--Show in stock album
+SELECT * FROM music_store WHERE in_stock == 0;
+
+-- How many albums in stock currently?
+SELECT SUM(in_stock) FROM music_store;
+
+
+
+
