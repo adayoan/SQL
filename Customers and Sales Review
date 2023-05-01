@@ -1,0 +1,40 @@
+/* Answering questions about customers and sales for each month */
+
+
+/* Preview customers table */
+SELECT * FROM BIT_DB.customers LIMIT 20;
+
+/* 1. How many orders were placed in January? */
+/* Look at data */
+SELECT * FROM BIT_DB.JanSales;
+/* Filter out incorrect order IDs */
+SELECT COUNT(*) FROM BIT_DB.JanSales WHERE LENGTH(orderID) = 6;
+/* 9681 orders */
+
+/* 2. How many of those orders were for an iPhone? */
+SELECT COUNT(*) FROM BIT_DB.JanSales WHERE LENGTH(orderID) = 6 AND Product = 'iPhone';
+/* 379 */
+
+
+/* 3. Select the customer account numbers for all the orders that were placed in February */
+SELECT * FROM BIT_DB.FebSales;
+SELECT * FROM BIT_DB.FebSales WHERE LENGTH(orderID) = 6;
+SELECT * FROM BIT_DB.customers;
+SELECT c.acctnum FROM BIT_DB.FebSales as f LEFT JOIN BIT_DB.customers as c ON f.orderID = c.order_id WHERE length(orderID) = 6;
+
+/* 4. Which product was the cheapest one sold in January, and what was the price? */
+SELECT distinct Product, price FROM BIT_DB.JanSales WHERE price IN (SELECT MIN(price) FROM BIT_DB.JanSales);
+/* AAA Batteries (4-pack) sold for 2.99 */
+
+/* 5. What is the total revenue for each product sold in January? */
+SELECT product, SUM(Quantity)*price AS Revenue FROM BIT_DB.JanSales WHERE LENGTH(orderID) = 6 GROUP BY product;
+
+/* 6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue? */
+SELECT *, Quantity*price AS Revenue FROM BIT_DB.FebSales WHERE location LIKE '%548 Lincoln St%';
+/* AA Batteries (4-pack), 2, 7.68 */
+
+
+/* 7. How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers? */
+SELECT COUNT(distinct c.acctnum), AVG(Quantity*price) FROM BIT_DB.FebSales AS f LEFT JOIN BIT_DB.customers AS c ON f.orderid = c.order_id
+ WHERE Quantity > 2 AND Length(orderID) = 6;
+/* 278 customers, average spent is about 13.83 */
