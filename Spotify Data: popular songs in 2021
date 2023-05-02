@@ -1,0 +1,75 @@
+/* Creating table and inserting data from this dataset: https://www.kaggle.com/datasets/equinxx/spotify-top-50-songs-in-2021?resource=download */
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL );
+
+/* Table of top 50 songs in 2021 according to spotify */
+SELECT * FROM BIT_DB.Spotifydata;
+
+
+/* Which artist had the most top songs, and what were they? */
+SELECT artist_name, COUNT(track_name) AS number_of_songs FROM BIT_DB.Spotifydata
+GROUP BY artist_name
+ORDER BY number_of_songs DESC;
+SELECT artist_name, track_name FROM BIT_DB.Spotifydata
+WHERE artist_name IN ('Olivia Rodrigo', 'Doja Cat');
+/* Olivia Rodrigo and Doja Cat were tied with 4 songs each. 
+Olivia's songs: drivers license, good 4 u, deja vu, traitor
+Doja's songs: Kiss Me More, Streets, Need to Know, Women */
+
+/* What percentage of top songs included a feature by another artist(s) */
+SELECT COUNT(*) FROM BIT_DB.Spotifydata
+WHERE track_name LIKE '%feat.%';
+/* 8/50 = 16% */
+
+/* What was the average danceability? */
+SELECT AVG(danceability) FROM BIT_DB.Spotifydata;
+
+/* Which were the 10 most popular songs? */
+SELECT * FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10;
+
+/* What was the average danceability of the top 10 songs, and how does that compare to the average overall? */
+SELECT AVG(danceability) FROM BIT_DB.Spotifydata
+WHERE track_name IN (
+SELECT track_name FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10);
+/* average danceability overall: 0.68572
+average danceability of top 10: 0.6643
+So a little less danceable but not by much */
+
+/* What was the average tempo of the top 10 songs vs the average tempo overall */
+SELECT AVG(tempo) FROM BIT_DB.Spotifydata;
+SELECT AVG(tempo) FROM BIT_DB.Spotifydata
+WHERE track_name IN (
+SELECT track_name FROM BIT_DB.Spotifydata
+ORDER BY popularity DESC
+LIMIT 10);
+/* average overall: 121.1
+average of top 10: 141.1 
+So the top ten have higher tempos on average */
+
+/* Which key were most of these songs written in? */
+SELECT song_key, COUNT(*) AS number_of_songs FROM BIT_DB.Spotifydata
+GROUP BY song_key
+ORDER BY number_of_songs DESC;
+/* Most songs were written in key 1, which is the key of C#, followed by a tie between key of G and key of C natural */
+
