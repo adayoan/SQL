@@ -1,0 +1,61 @@
+/*Show Customers (their full names, customer ID, and country) who are not in the US.*/
+
+SELECT CustomerId, FirstName, LastName, Country FROM chinook.customers
+WHERE Country <> 'USA';
+
+/*Show only the Customers from Brazil.*/
+SELECT CustomerId, FirstName, LastName, Country FROM chinook.customers 
+WHERE Country = 'Brazil';
+
+/*Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.*/
+SELECT c.FirstName, c.LastName, i.InvoiceId, i.InvoiceDate, i.BillingCountry FROM chinook.invoices AS i
+JOIN chinook.customers AS c
+ON i.CustomerId = c.CustomerId
+WHERE c.Country = 'Brazil';
+
+/*Show the Employees who are Sales Agents.*/
+SELECT * FROM chinook.employees
+WHERE Title = 'Sales Support Agent';
+
+/*Find a unique/distinct list of billing countries from the Invoice table.*/
+SELECT distinct BillingCountry FROM chinook.invoices;
+
+/*Provide a query that shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.*/
+
+SELECT i.InvoiceId, i.CustomerId, e.FirstName, e.LastName FROM chinook.invoices AS i
+JOIN chinook.customers AS c
+ON c.CustomerId = i.CustomerId
+JOIN chinook.employees AS e
+ON c.SupportRepId = e.EmployeeId;
+
+/*How many Invoices were there in 2009?*/
+SELECT COUNT(*) FROM chinook.invoices
+WHERE InvoiceDate LIKE '2009%';
+
+/*What are the total sales for 2009?*/
+SELECT SUM(Total) FROM chinook.invoices
+WHERE InvoiceDate LIKE '2009%';
+
+/*Write a query that includes the purchased track name with each invoice line ID.*/
+SELECT i.InvoiceLineId, t.Name FROM chinook.invoice_items as i
+JOIN chinook.tracks as t
+ON i.TrackId = t.TrackId;
+
+/*Write a query that includes the purchased track name AND artist name with each invoice line ID.*/
+WITH tempTable AS (SELECT albums.AlbumId, artists.Name FROM albums
+JOIN artists
+ON albums.ArtistId = artists.ArtistId)
+SELECT i.InvoiceLineId, t.Name AS track_name, tempTable.Name AS artist_name FROM invoice_items as i
+JOIN tracks as t
+ON i.TrackId = t.TrackId
+JOIN tempTable
+ON tempTable.AlbumId = t.AlbumId;
+
+/*Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.*/
+SELECT tracks.TrackId, tracks.Name AS Song, albums.Title AS Album, m.Name AS Media_Type, genres.Name AS Genre FROM tracks
+JOIN albums
+ON tracks.AlbumId = albums.AlbumId
+JOIN media_types AS m
+ON tracks.MediaTypeId = m.MediaTypeId
+JOIN genres
+ON tracks.GenreId = genres.GenreId;
